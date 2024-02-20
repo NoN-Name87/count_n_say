@@ -14,10 +14,10 @@ public:
         while(!num.empty())
         {
             char temp = *num.begin();
-            auto it = std::remove(num.begin(), num.end(), temp);
-            size_t count = std::distance(it, num.end());
+            auto it = std::find_if(num.begin(), num.end(), [&temp](char symb){ return temp != symb; });
+            size_t count = std::distance(num.begin(), it);
             new_num += std::to_string(count) + temp;
-            num.erase(it, num.end());
+            num.erase(num.begin(), it);
         }
         return new_num;
     }
@@ -31,14 +31,13 @@ int main(int argc, char **argv)
         if(argc > 1)
         {
             int num = std::stoi(argv[1]);
-            if(num < 1)
-                throw std::logic_error("Number must be more than 0");
+            if(num < 1 || num > 30)
+                throw std::logic_error("Number must be more than 0 or less than 31");
             std::cout << sol.countAndSay(num) << "\n";
         }
     }
     catch(const std::exception & except)
     {
         std::cout << "ERROR: " << except.what() << "\n";
-    }
-    
+    }   
 }
